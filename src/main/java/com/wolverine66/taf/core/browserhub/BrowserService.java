@@ -5,13 +5,20 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
 public class BrowserService {
 	
+	protected static final Logger logger = LogManager.getLogger();
 	private static ThreadLocal<WebDriver> defaultDriver = new ThreadLocal<WebDriver>();
 	private static ThreadLocal<List<WebDriver>> driverList = new ThreadLocal<List<WebDriver>>();
 	private static List<WebDriver> drivers = new CopyOnWriteArrayList<WebDriver>();
+
+	private BrowserService() {
+	    throw new IllegalStateException("This is BrowserServices class and avoiding to create object");
+	  }
 
 	public static WebDriver getDriver() {
 		if(defaultDriver.get() == null) {
@@ -77,9 +84,9 @@ public class BrowserService {
 		catch(RuntimeException e) {
 			if(e.getMessage().contains("Error communicating with the remote browser, It may have died"));
 			{
-				System.out.println("Warn : "+e.getMessage());
+				logger.warn(e.getMessage());
 			}
-			System.out.println("Error : "+e.getMessage());
+			logger.error(e.getMessage());
 		}
 	}
 	
@@ -96,5 +103,6 @@ public class BrowserService {
 			closeDriver(driver);
 		}
 		defaultDriver.remove();
+		driverList.remove();
 	}
 }

@@ -3,17 +3,11 @@ package com.wolverine66.taf.core.browserhub;
 import java.io.File;
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.GeckoDriverService;
@@ -21,11 +15,16 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.service.DriverCommandExecutor;
 import org.openqa.selenium.remote.service.DriverService;
 
-public class DriverUtils implements WebDriver {
+import com.wolverine66.taf.core.exceptions.TitaniumTAFRuntimeException;
+
+public class DriverUtils {
 	
 	WebDriver driver;
 	DriverService driverService;
-	JavascriptExecutor js;
+
+	public WebDriver getDriver() {
+		return driver;
+	}
 
 	public DriverUtils(Browser browser, File driverExecutableFile) {
 		initializeDriver(browser, driverExecutableFile);
@@ -49,7 +48,7 @@ public class DriverUtils implements WebDriver {
 					driver = new RemoteWebDriver(driverService.getUrl(), null);
 			}
 			catch(Exception e){
-				throw new RuntimeException();
+				throw new TitaniumTAFRuntimeException("Failed to instanitiate Firefox browser");
 			}
 		}
 	}
@@ -74,66 +73,8 @@ public class DriverUtils implements WebDriver {
 				}
 			}
 			catch(Exception e){
-				throw new RuntimeException();
+				throw new TitaniumTAFRuntimeException();
 			}
-		}
-		
-	}
-
-	public void get(String url) {
-		driver.get(url);		
-	}
-
-	public String getCurrentUrl() {
-		return driver.getCurrentUrl();
-	}
-
-	public String getTitle() {
-		return driver.getTitle();
-	}
-
-	public List<WebElement> findElements(By by) {
-		return driver.findElements(by);
-	}
-
-	public WebElement findElement(By by) {
-		System.out.println("FindElement");
-		return driver.findElement(by);
-	}
-
-	public String getPageSource() {
-		return driver.getPageSource();
-	}
-
-	public void close() {
-		driver.close();
-	}
-
-	public void quit() {
-		driver.quit();
-	}
-
-	public Set<String> getWindowHandles() {
-		return driver.getWindowHandles();
-	}
-
-	public String getWindowHandle() {
-		return driver.getWindowHandle();
-	}
-
-	public TargetLocator switchTo() {
-		return driver.switchTo();
-	}
-
-	public Navigation navigate() {
-		return driver.navigate();
-	}
-
-	public Options manage() {
-		return driver.manage();
-	}
-
-	public void executeJse(String script) {
-		js.executeScript(script);
+		}		
 	}
 }
