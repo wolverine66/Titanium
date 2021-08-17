@@ -21,7 +21,7 @@ public enum Browser {
 		return id;
 	}
 	
-	private static Browser fromName(String name) {
+	public static Browser fromName(String name) {
 		for(Browser browser : Browser.values()) {
 			if(browser.getName().equalsIgnoreCase(name)){
 				return browser;
